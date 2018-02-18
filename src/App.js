@@ -1,5 +1,6 @@
 import React from 'react'
 import Blog from './components/Blog'
+import CreateBlog from './components/CreateBlog'
 import blogService from './services/blogs'
 import loginService from './services/login'
 
@@ -63,6 +64,20 @@ class App extends React.Component {
     this.setState({ [event.target.name]: event.target.value })
   }
 
+  createBlog = async (blog) => {
+    try{
+      const newBlog = await blogService.create(blog)
+      this.setState({blogs: this.state.blogs.concat(newBlog)})
+    } catch(exception) {
+      this.setState({
+        error: 'unable to create new blog entry',
+      })
+      setTimeout(() => {
+        this.setState({ error: null })
+      }, 5000)
+    }
+  }
+
   render() {
     const loginForm = () => (
       <div>
@@ -105,6 +120,7 @@ class App extends React.Component {
             {this.state.blogs.map(blog => 
               <Blog key={blog.id} blog={blog}/>
             )}
+            <CreateBlog createBlog={this.createBlog}/>
           </div>       
         }
       </div>
