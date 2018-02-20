@@ -1,5 +1,6 @@
 import React from 'react'
 import Blog from './components/Blog'
+import Notification from './components/Notification'
 import CreateBlog from './components/CreateBlog'
 import blogService from './services/blogs'
 import loginService from './services/login'
@@ -9,7 +10,7 @@ class App extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      error: '',
+      error: null,
       blogs: [],
       username: '',
       password: '',
@@ -67,7 +68,13 @@ class App extends React.Component {
   createBlog = async (blog) => {
     try{
       const newBlog = await blogService.create(blog)
-      this.setState({blogs: this.state.blogs.concat(newBlog)})
+      this.setState({
+        blogs: this.state.blogs.concat(newBlog), 
+        error: `a new blog entry "${newBlog.title}" created`
+      })
+      setTimeout(() => {
+        this.setState({ error: null })
+      }, 5000)
     } catch(exception) {
       this.setState({
         error: 'unable to create new blog entry',
@@ -109,6 +116,8 @@ class App extends React.Component {
     return (
       <div>
         <h1>Plokilist frontend</h1>
+        <Notification message={this.state.error} />
+
         {this.state.user === null ?
           loginForm() :
           <div>
