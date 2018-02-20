@@ -2,6 +2,7 @@ import React from 'react'
 import Blog from './components/Blog'
 import Notification from './components/Notification'
 import CreateBlog from './components/CreateBlog'
+import Togglable from './components/Togglable'
 import blogService from './services/blogs'
 import loginService from './services/login'
 
@@ -129,7 +130,9 @@ class App extends React.Component {
             {this.state.blogs.map(blog => 
               <Blog key={blog.id} blog={blog}/>
             )}
-            <CreateBlog createBlog={this.createBlog}/>
+            <Togglable buttonLabel="new blog">
+              <CreateBlog createBlog={this.createBlog}/>
+            </Togglable>  
           </div>       
         }
       </div>
