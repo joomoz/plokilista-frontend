@@ -89,10 +89,9 @@ class App extends React.Component {
   likeBlog = async (blog) => {
     try{
       const likedBlog = await blogService.update(blog)
-      console.log(likedBlog)
-      blogService.getAll().then(blogs =>
-        this.setState({ blogs })
-      )
+      // blogService.getAll().then(blogs =>
+      //   this.setState({ blogs })
+      // )
 
       this.setState({
         error: `"${likedBlog.title}" liked`
