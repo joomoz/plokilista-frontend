@@ -13,16 +13,15 @@ class App extends React.Component {
     this.state = {
       error: null,
       blogs: [],
-      username: '',
       password: '',
       user: null
     }
   }
 
-  componentDidMount() {
-    blogService.getAll().then(blogs =>
-      this.setState({ blogs })
-    )
+  async componentDidMount() {
+    const blogs = await blogService.getAll()
+    blogs.sort((a, b) => (a.likes > b.likes ? -1 : 1))
+    this.setState({ blogs })
 
     const loggedUserJSON = window.localStorage.getItem('loggedBlogappUser')
     if (loggedUserJSON) {
@@ -89,11 +88,8 @@ class App extends React.Component {
   likeBlog = async (blog) => {
     try{
       const likedBlog = await blogService.update(blog)
-      // blogService.getAll().then(blogs =>
-      //   this.setState({ blogs })
-      // )
-
       this.setState({
+        blogs: this.state.blogs.map(blog => blog.id !== likedBlog.id ? blog : likedBlog),
         error: `"${likedBlog.title}" liked`
       })
       setTimeout(() => {
