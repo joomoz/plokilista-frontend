@@ -86,6 +86,30 @@ class App extends React.Component {
     }
   }
 
+  likeBlog = async (blog) => {
+    try{
+      const likedBlog = await blogService.update(blog)
+      console.log(likedBlog)
+      blogService.getAll().then(blogs =>
+        this.setState({ blogs })
+      )
+
+      this.setState({
+        error: `"${likedBlog.title}" liked`
+      })
+      setTimeout(() => {
+        this.setState({ error: null })
+      }, 5000)
+    } catch(exception) {
+      this.setState({
+        error: 'unable to add like',
+      })
+      setTimeout(() => {
+        this.setState({ error: null })
+      }, 5000)
+    }
+  }
+
   render() {
     const loginForm = () => (
       <div>
@@ -128,7 +152,7 @@ class App extends React.Component {
             </p>
             <h2>Blogs:</h2>
             {this.state.blogs.map(blog => 
-              <Blog key={blog.id} blog={blog}/>
+              <Blog key={blog.id} blog={blog} likeBlog={this.likeBlog}/>
             )}
             <Togglable buttonLabel="new blog">
               <CreateBlog createBlog={this.createBlog}/>
