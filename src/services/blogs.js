@@ -14,7 +14,7 @@ const setToken = (newToken) => {
 
 const create = async (newObject) => {
   const config = {
-    headers: { 'Authorization': token }
+    headers: { 'Authorization': token, 'Content-Type':'application/json' }
   }
 
   const response = await axios.post(baseUrl, newObject, config)
@@ -23,12 +23,20 @@ const create = async (newObject) => {
 
 const update = async (blog) => {
   const config = { 
-    headers: { 'Authorization': token }
+    headers: { 'Authorization': token , 'Content-Type':'application/json'}
   }
   const response = await axios
     .put(`${baseUrl}/${blog.id}`, blog, config)
-    // .populate('user')
   return response.data
 }
 
-export default { getAll, create, setToken, update }
+const remove = async (blog) => {
+  const config = { 
+    headers: { 'Authorization': token , 'Content-Type':'application/json'}
+  }
+  const response = await axios
+    .delete(`${baseUrl}/${blog.id}`, config);
+  return response.data
+}
+
+export default { getAll, create, setToken, update, remove }

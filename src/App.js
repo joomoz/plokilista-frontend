@@ -20,9 +20,7 @@ class App extends React.Component {
   }
 
   async componentDidMount() {
-    const blogs = await blogService.getAll()
-    blogs.sort((a, b) => (a.likes > b.likes ? -1 : 1))
-    this.setState({ blogs })
+    this.refreshBlogs()
 
     const loggedUserJSON = window.localStorage.getItem('loggedBlogappUser')
     if (loggedUserJSON) {
@@ -31,6 +29,12 @@ class App extends React.Component {
       blogService.setToken(user.token)
     }
   } 
+
+  refreshBlogs = async () => {
+    let blogs = await blogService.getAll()
+    blogs.sort((a, b) => (a.likes > b.likes ? -1 : 1))
+		this.setState({blogs})
+	}
 
   login = async (event) => {
     event.preventDefault()
@@ -69,9 +73,9 @@ class App extends React.Component {
   createBlog = async (blog) => {
     try{
       const newBlog = await blogService.create(blog)
+      this.refreshBlogs()
       this.setState({
-        blogs: this.state.blogs.concat(newBlog), 
-        error: `a new blog entry "${newBlog.title}" created`
+        error: `a new blog entry ${newBlog.title} created`
       })
       setTimeout(() => {
         this.setState({ error: null })
@@ -89,8 +93,8 @@ class App extends React.Component {
   likeBlog = async (blog) => {
     try{
       const likedBlog = await blogService.update(blog)
+      this.refreshBlogs()
       this.setState({
-        blogs: this.state.blogs.map(blog => blog.id !== likedBlog.id ? blog : likedBlog),
         error: `"${likedBlog.title}" liked`
       })
       setTimeout(() => {
@@ -99,6 +103,27 @@ class App extends React.Component {
     } catch(exception) {
       this.setState({
         error: 'unable to add like',
+      })
+      setTimeout(() => {
+        this.setState({ error: null })
+      }, 5000)
+    }
+  }
+
+  deleteBlog = async (blog) => {
+    try{
+      const removedBlog = await blogService.remove(blog)
+      console.log("blog deleted")
+      this.refreshBlogs()
+      this.setState({
+        error: `${removedBlog.title} removed`
+      })
+      setTimeout(() => {
+        this.setState({ error: null })
+      }, 5000)
+    } catch(exception) {
+      this.setState({
+        error: 'unable to remove blog',
       })
       setTimeout(() => {
         this.setState({ error: null })
@@ -148,7 +173,13 @@ class App extends React.Component {
             </p>
             <h2>Blogs:</h2>
             {this.state.blogs.map(blog => 
-              <Blog key={blog.id} blog={blog} likeBlog={this.likeBlog}/>
+              <Blog 
+                key={blog.id} 
+                blog={blog} 
+                likeBlog={this.likeBlog}
+                deleteBlog={this.deleteBlog}
+                user={this.state.user}
+              />
             )}
             <Togglable buttonLabel="new blog">
               <CreateBlog createBlog={this.createBlog}/>
