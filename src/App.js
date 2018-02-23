@@ -14,7 +14,8 @@ class App extends React.Component {
       error: null,
       blogs: [],
       password: '',
-      user: null
+      user: null,
+      username: ''
     }
   }
 

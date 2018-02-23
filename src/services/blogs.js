@@ -3,9 +3,9 @@ const baseUrl = '/api/blogs'
 
 let token = null
 
-const getAll = () => {
-  const request = axios.get(baseUrl)
-  return request.then(response => response.data)
+const getAll = async () => {
+  const response = await axios.get(baseUrl)
+  return response.data
 }
 
 const setToken = (newToken) => {
@@ -25,8 +25,10 @@ const update = async (blog) => {
   const config = { 
     headers: { 'Authorization': token }
   }
-  const response = await axios.put(`${baseUrl}/${blog.id}`, blog, config)
-  return response.data;
+  const response = await axios
+    .put(`${baseUrl}/${blog.id}`, blog, config)
+    // .populate('user')
+  return response.data
 }
 
 export default { getAll, create, setToken, update }

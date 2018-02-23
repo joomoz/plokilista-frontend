@@ -21,7 +21,7 @@ class Blog extends React.Component {
     const likedBlog = {
       ...this.state.blog,
       likes: this.state.blog.likes + 1,
-      user: this.state.blog.user._id
+      user: this.props.blog.user._id
     }
     await this.props.likeBlog(likedBlog)
     this.setState({blog: likedBlog})
@@ -40,7 +40,7 @@ class Blog extends React.Component {
       <div>
         <a href={this.state.blog.url}>{this.state.blog.url}</a>
         <p>{this.state.blog.likes} likes <button onClick={this.likeBlog}>like</button> </p>
-        <p>Added by: {this.state.blog.user ? this.state.blog.user.name : ""}</p>
+        <p>Added by: {this.props.blog.user ? this.props.blog.user.name : ""}</p>
       </div>
     )
 
