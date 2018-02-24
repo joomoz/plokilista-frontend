@@ -3,7 +3,7 @@ let token = null
 const blogs = [
   {
     id: "5a451df7571c224a31b5c8ce",
-    title: "HTML on helppoa",
+    title: "React on helppoa",
     author: "Luukkainen",
     likes: 1086,
     user: {
@@ -31,4 +31,8 @@ const getAll = () => {
   return Promise.resolve(blogs)
 }
 
-export default { getAll, blogs }
+const setToken = newToken => {
+  token = `bearer ${newToken}`
+}
+
+export default { getAll, blogs, setToken }
