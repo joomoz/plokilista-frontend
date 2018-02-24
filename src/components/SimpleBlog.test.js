@@ -3,19 +3,34 @@ import { shallow } from 'enzyme'
 import SimpleBlog from './SimpleBlog'
 
 describe.only('<SimpleBlog />', () => {
-  it('renders title', () => {
-    const blog = {
-      title: 'this is title',
-      author: 'this is author',
-      url: 'www.www.www',
-      likes: 99
-    }
+  let blogComponent
+  const mockHandler = jest.fn()
 
-    const blogComponent = shallow(<SimpleBlog blog={blog} />)
+  const blog = {
+    title: 'this is title',
+    author: 'this is author',
+    url: 'www.address.com',
+    likes: 99
+  }
+  
+  beforeEach(() => {
+    blogComponent = shallow(<SimpleBlog blog={blog} onClick={mockHandler}/>)
+  })
+
+  it('renders title, author and likes', () => {
     const contentDiv = blogComponent.find('.content')
 
     expect(contentDiv.text()).toContain(blog.title)
     expect(contentDiv.text()).toContain(blog.author)
     expect(contentDiv.text()).toContain(blog.likes)
+  })
+
+  it('two clicks on the button calls event handler twice', () => {
+    const button = blogComponent.find('button')
+    
+    button.simulate('click')
+    button.simulate('click')
+
+    expect(mockHandler.mock.calls.length).toBe(2)
   })
 })
