@@ -133,7 +133,7 @@ class App extends React.Component {
 
   render() {
     const loginForm = () => (
-      <div>
+      <div className="loginForm">
         <h2>Login to plokilist app</h2>
         <form onSubmit={this.login}>
           <div>
@@ -160,7 +160,7 @@ class App extends React.Component {
     )
 
     return (
-      <div>
+      <div className="appDiv">
         <h1>Plokilist frontend</h1>
         <Notification message={this.state.error} />
 
