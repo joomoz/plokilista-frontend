@@ -63,10 +63,10 @@ class Blog extends React.Component {
     )
 
     return (
-      <div style={blogStyle} >
-        <p onClick={this.toggleInfo}>
-          {this.state.blog.title} {this.state.blog.author}
-        </p> 
+      <div style={blogStyle} className="content">
+        <div onClick={this.toggleInfo} className="titleDiv">
+          <p>{this.state.blog.title} {this.state.blog.author}</p>
+        </div> 
         {this.state.showInfo && blogInfo()}
       </div>  
 
