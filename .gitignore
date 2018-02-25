@@ -1,5 +1,7 @@
 # dependencies
 /node_modules
+/redux-anecdotes/node_modules
+/redux-unicafe/node_modules
 
 # misc
 .env*
